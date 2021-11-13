@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>跟随鼠标-小羊</title>
+    
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: skyblue;
+        }
+
+        .img {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            background-image: url('./goat.gif');
+            background-size: cover;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="img">
+    </div>
+</body>
+
+<script>
+    let img = document.querySelector('.img');
+    let deg = 0;//定义小图片的旋转角度
+    let imgLeft = 0;//小图片距离网页左侧的位置
+    let imgTop = 0;//小图片距离网页顶部的位置
+    let imgX = 0;//小图片移动时的x轴位置
+    let imgY = 0;//小图片移动时的y轴位置
+    let flipAngle = 0;//小图片翻转度数
+    let count = 0;// 计数器
+    window.addEventListener('mousemove', function (xyz) {
+        // console.log('xyz',xyz);
+        imgLeft = xyz.x - img.offsetLeft - img.clientWidth / 2;// 获取网页左侧距离的图片位置
+        imgTop = xyz.y - img.offsetTop - img.clientHeight / 2;// 获取网页顶部距离的图片位置
+        deg = 360 * Math.atan(imgTop / imgLeft) / (2 * Math.PI);// 套入公式，定义图片的旋转角度
+        count = 0;// 每当鼠标移动的时候重置count
+        let x = event.clientX;
+        if (img.offsetLeft < x) {// 当鼠标的x轴大于图片的时候，图片就要对着鼠标，所以需要将图片翻转过来
+            flipAngle = -180;
+        } else {
+             flipAngle = 0 ;// 否则就不用翻转
+            }
+    })
+    // 设置小图片的位置和速度，并判断小图片到达鼠标位置时停止移动
+    setInterval(() => {
+        img.style.transform = "rotateZ(" + deg + "deg) rotateY(" + flipAngle + "deg)"; // 设置小图片的旋转和翻转
+        count++;
+        if (count < 50) {
+            imgX += imgLeft / 50;
+            imgY += imgTop / 50;
+        }
+        img.style.left = imgX + "px";
+        img.style.top = imgY + 'px';
+    }, 20);
+</script>
+</html>
